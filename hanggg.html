@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shayari Hub 💔✨</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Hind:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Hind', sans-serif;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #141e30, #243b55);
+      color: white;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      padding: 15px;
+    }
+
+    .container {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: rgba(255,255,255,0.08);
+      padding: 25px;
+      border-radius: 20px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+      text-align: center;
+      animation: fadeIn 0.6s ease;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+
+    h1 {
+      margin-bottom: 15px;
+      font-weight: 600;
+      font-size: 22px;
+    }
+
+    #shayari {
+      font-size: 18px;
+      line-height: 1.6;
+      margin: 20px 0;
+      min-height: 60px;
+    }
+
+    .buttons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      margin: 6px;
+      padding: 10px 16px;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: 0.3s;
+    }
+
+    .new-btn {
+      background: #ff4d6d;
+      color: white;
+    }
+
+    .copy-btn {
+      background: #00c896;
+      color: white;
+    }
+
+    button:hover {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+
+    footer {
+      margin-top: 15px;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    @media (max-width: 400px) {
+      h1 {
+        font-size: 18px;
+      }
+
+      #shayari {
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="container">
+    <div class="card">
+      <h1>💖 Shayari 💖</h1>
+
+      <p id="shayari">Loading...</p>
+
+      <div class="buttons">
+        <button class="new-btn" onclick="getShayari()">New Shayari</button>
+        <button class="copy-btn" onclick="copyShayari()">Copy</button>
+      </div>
+
+      <footer>Powered by Gp team🚀</footer>
+    </div>
+  </div>
+
+  <script>
+    let currentShayari = "";
+
+    async function getShayari() {
+      try {
+        const res = await fetch("https://api.allorigins.win/raw?url=https://pyosintx-shaurya.vercel.app/api/shayari");
+
+        const text = await res.text();
+
+        try {
+          const data = JSON.parse(text);
+          currentShayari = data.shayari || data.message || text;
+        } catch {
+          currentShayari = text;
+        }
+
+        document.getElementById("shayari").innerText = currentShayari;
+
+      } catch (err) {
+        document.getElementById("shayari").innerText = "API not working 😢";
+      }
+    }
+
+    function copyShayari() {
+      if (!currentShayari) return;
+      navigator.clipboard.writeText(currentShayari);
+      alert("Copied 😎");
+    }
+
+    getShayari();
+  </script>
+
+</body>
+</html>
